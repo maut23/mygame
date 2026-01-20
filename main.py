@@ -73,7 +73,7 @@ class WinScreen(Screen):
 
 # 🧠 APP
 
-class CounterGame(App):
+class MyGameApp(App):
     def build(self):
         sm=ScreenManager()
         sm.add_widget(MenuScreen(name="menu"))
@@ -81,4 +81,5 @@ class CounterGame(App):
         sm.add_widget(WinScreen(name="win"))
         return sm
 
-CounterGame().run()
+MyGameApp().run()
+
