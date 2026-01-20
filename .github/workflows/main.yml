@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -22,7 +22,7 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      # 3️⃣ Install Android SDK + Build-tools + NDK
+      # 3️⃣ Install Android SDK + Build-tools + NDK and accept licenses
       - name: Install Android SDK and NDK
         run: |
           mkdir -p $HOME/android-sdk/cmdline-tools
