@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout your repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Install Python, Buildozer, and Cython
       - name: Install dependencies
         run: |
           sudo apt update
@@ -20,25 +22,37 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Install Android SDK
+      # 3️⃣ Install Android SDK + cmdline-tools + NDK
+      - name: Install Android SDK and NDK
         run: |
-          mkdir -p $HOME/android-sdk
-          cd $HOME/android-sdk
+          # Create SDK directories
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          mkdir -p $HOME/android-sdk/ndk
+          
+          # Download command line tools
+          cd $HOME/android-sdk/cmdline-tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip
-          mkdir -p cmdline-tools
-          mv cmdline-tools cmdline-tools/latest
+          mv cmdline-tools latest
+          
+          # Set environment variables
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;36.1.0"
 
+          # Accept all licenses
+          yes | sdkmanager --licenses
+
+          # Install platform tools, build tools, SDK platform, NDK
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;36.1.0" "ndk;25.2.9519653"
+
+      # 4️⃣ Build APK using Buildozer
       - name: Build APK
         run: |
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
           buildozer android debug
 
+      # 5️⃣ Upload APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
