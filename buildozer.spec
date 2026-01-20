@@ -1,0 +1,15 @@
+[app]
+title = MyGame
+package.name = mygame
+package.domain = org.test
+source.dir = .
+source.include_exts = py,png,jpg,kv,mp3
+
+version = 0.1
+requirements = python3,kivy
+
+orientation = portrait
+fullscreen = 1
+
+android.api = 33
+android.minapi = 21
