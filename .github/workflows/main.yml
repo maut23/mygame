@@ -1,4 +1,4 @@
-name: Build APKs
+name: Build Counter Game APKs
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -52,7 +52,7 @@ jobs:
       # 6️⃣ Setup keystore for release
       - name: Setup keystore
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > mygame.keystore
+          echo "$KEYSTORE_BASE64" | base64 --decode > countergame.keystore
 
       # 7️⃣ Build Signed Release APK
       - name: Build Signed Release APK
@@ -60,7 +60,7 @@ jobs:
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
           buildozer android release \
-            android.keystore=./mygame.keystore \
+            android.keystore=./countergame.keystore \
             android.keyalias=$KEY_ALIAS \
             android.keystore_pass=$KEYSTORE_PASSWORD \
             android.keyalias_pass=$KEY_PASSWORD
