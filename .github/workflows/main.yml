@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Release APK/AAB
 
 on:
   push:
@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      # 2️⃣ Install Python + Buildozer + Cython
       - name: Install dependencies
         run: |
           sudo apt update
@@ -22,7 +20,6 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      # 3️⃣ Install Android SDK + Build-tools + NDK and accept licenses
       - name: Install Android SDK and NDK
         run: |
           mkdir -p $HOME/android-sdk/cmdline-tools
@@ -32,21 +29,26 @@ jobs:
           mv cmdline-tools latest
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          # Auto-accept licenses
           yes | sdkmanager --licenses
-          # Install platform-tools, build-tools, SDK platform, NDK
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;36.1.0" "ndk;25.2.9519653"
 
-      # 4️⃣ Build APK
-      - name: Build APK
+      # Decode keystore from base64 secret
+      - name: Setup keystore
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > mygame.keystore
+
+      - name: Build signed release APK
         run: |
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          buildozer android debug
+          buildozer android release \
+            android.keystore=./mygame.keystore \
+            android.keyalias=$KEY_ALIAS \
+            android.keystore_pass=$KEYSTORE_PASSWORD \
+            android.keyalias_pass=$KEY_PASSWORD
 
-      # 5️⃣ Upload APK artifact
-      - name: Upload APK
+      - name: Upload APK/AAB
         uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: release-apk
           path: bin/*.apk
