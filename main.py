@@ -5,7 +5,7 @@ from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.animation import Animation
 
-# 🧩 MENU SCREEN
+# Menu Screen
 class MenuScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -24,7 +24,7 @@ class MenuScreen(Screen):
     def exit_app(self,instance):
         App.get_running_app().stop()
 
-# 🎮 GAME SCREEN
+# Game Screen
 class GameScreen(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -41,7 +41,6 @@ class GameScreen(Screen):
         layout.add_widget(reset_btn)
         self.add_widget(layout)
     def increase_point(self,instance):
-        # 🎬 animation
         anim=Animation(opacity=0.5,duration=0.05)+Animation(opacity=1,duration=0.05)
         anim.start(instance)
         if self.point<self.max_point:
@@ -53,8 +52,7 @@ class GameScreen(Screen):
         self.point=10
         self.point_label.text="Point:10"
 
-# 🏆 WIN SCREEN
-
+# Win Screen
 class WinScreen(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -71,8 +69,7 @@ class WinScreen(Screen):
         game.point_label.text="Point:10"
         self.manager.current="menu"
 
-# 🧠 APP
-
+# App
 class MyGameApp(App):
     def build(self):
         sm=ScreenManager()
@@ -82,4 +79,3 @@ class MyGameApp(App):
         return sm
 
 MyGameApp().run()
-
