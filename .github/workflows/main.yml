@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout your repository
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Install Python, Buildozer, and Cython
+      # 2️⃣ Install Python + Buildozer + Cython
       - name: Install dependencies
         run: |
           sudo apt update
@@ -22,30 +22,22 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      # 3️⃣ Install Android SDK + cmdline-tools + NDK
+      # 3️⃣ Install Android SDK + Build-tools + NDK
       - name: Install Android SDK and NDK
         run: |
-          # Create SDK directories
           mkdir -p $HOME/android-sdk/cmdline-tools
-          mkdir -p $HOME/android-sdk/ndk
-          
-          # Download command line tools
           cd $HOME/android-sdk/cmdline-tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip
           mv cmdline-tools latest
-          
-          # Set environment variables
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-
-          # Accept all licenses
+          # Accept licenses
           yes | sdkmanager --licenses
-
-          # Install platform tools, build tools, SDK platform, NDK
+          # Install platform-tools, build-tools, SDK platform, NDK
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;36.1.0" "ndk;25.2.9519653"
 
-      # 4️⃣ Build APK using Buildozer
+      # 4️⃣ Build APK
       - name: Build APK
         run: |
           export ANDROID_HOME=$HOME/android-sdk
@@ -58,4 +50,5 @@ jobs:
         with:
           name: apk
           path: bin/*.apk
+
 
