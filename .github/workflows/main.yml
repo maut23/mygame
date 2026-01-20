@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -32,7 +32,7 @@ jobs:
           mv cmdline-tools latest
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          # Accept licenses
+          # Auto-accept licenses
           yes | sdkmanager --licenses
           # Install platform-tools, build-tools, SDK platform, NDK
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;36.1.0" "ndk;25.2.9519653"
@@ -50,5 +50,3 @@ jobs:
         with:
           name: apk
           path: bin/*.apk
-
-
